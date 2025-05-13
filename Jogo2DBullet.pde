@@ -4,9 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 String nome = "";
-
 int pontuacaoJogador = 0;
-
 int telaAtual = 0; // 0 = Cadastro, 1 = Jogo
 
 SoundFile musicaNave;
@@ -75,11 +73,16 @@ if (!jogoAtivo) {
   text("GAME OVER", width/2, (height/2)+100);
   
 
-  fill(5,149,22);
+  fill(5,149,22   );
   textAlign(CENTER, CENTER);
   textSize(50);
   text("O jogador "+nome+"\nteve a pontuação de "+pontuacaoJogador, width/2, height/2);
   
+  
+  //restart
+  fill(255);
+  textSize(25);
+  text("Pressione enter para restart",width/2, height/2 + 300);
 
   return;
 }
@@ -197,8 +200,24 @@ if (telaAtual == 0) {
   if (key == ' ' && jogoAtivo) {
     atirar();
   }
+  
+  if(!jogoAtivo && (key == ENTER || key == RETURN)){
+    restart();
+  }
+  
 }
 }
+
+
+void restart(){
+   pontuacaoJogador = 0;
+  naveX = width/2 - nave.width/2;
+  naveY = height/2 - nave.height/2;
+  tiros.clear();
+  meteoros.clear();
+  jogoAtivo = true;
+}
+
 
 void atirar() {
 if (somTiro.isPlaying()) somTiro.stop();
