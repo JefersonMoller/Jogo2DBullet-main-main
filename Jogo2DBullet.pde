@@ -13,6 +13,7 @@ SoundFile musicaNave;
 SoundFile somTiro;
 SoundFile somExplosao;
 
+PFont minhaFOnte, fontePadrao;
 PImage fundo, nave, laserImg, explosaoImg, meteoroImg, gameOver;
 float naveX, naveY;
 float velocidadeNave = 5;
@@ -32,9 +33,15 @@ fundoX2 = width;
 fundo = loadImage("apresentacao.png");//imagem da tela cadastro - apresentaçãol
 
 gameOver = loadImage("gameOverSangrento.png");
+
+
+//importando fonte e usando
+minhaFOnte = createFont("HelpMe.ttf",32);
+fontePadrao = createFont("arial",32);
+
   
 if(gameOver != null){
-  gameOver.resize(600,400);
+  gameOver.resize(1200,800);
 }
 
 }
@@ -87,17 +94,17 @@ if (!jogoAtivo) {
   
 
   fill(255, 0, 0);
-  textAlign(CENTER, CENTER);
+  //textAlign(CENTER, CENTER);
+  textFont(minhaFOnte);
   textSize(50);
   text("GAME OVER", width/2, (height/2)+100);
   
-
-  fill(5,149,22   );
-  textAlign(CENTER, CENTER);
+  textFont(fontePadrao);
+  fill(5,149,22);
+  //textAlign(CENTER, CENTER);
   textSize(50);
   text("O jogador "+nome+"\nteve a pontuação de "+pontuacaoJogador, width/2, height/2);
-  
-  
+ 
   //restart
   fill(255);
   textSize(25);
@@ -130,13 +137,16 @@ if (musicaNave == null) {
   
   tempoInicial = millis();
   
-  int tempoDecorrido = millis() - tempoInicial;
-  int minutosPassados =  tempoDecorrido / 60000;
-  multiplicaVeloc = 1.0 + minutosPassados * 0.5;
+  
   
 
   
 }
+
+int tempoDecorrido = millis() - tempoInicial;
+  int minutosPassados =  tempoDecorrido / 60000;
+  multiplicaVeloc = 1.0 + minutosPassados * 0.5;
+
 
 background(0);
 
