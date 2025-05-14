@@ -6,12 +6,14 @@ import java.util.ArrayList;
 String nome = "";
 int pontuacaoJogador = 0;
 int telaAtual = 0; // 0 = Cadastro, 1 = Jogo
+int tempoInicial;
+float multiplicaVeloc = 1.0;
 
 SoundFile musicaNave;
 SoundFile somTiro;
 SoundFile somExplosao;
 
-PImage fundo, nave, laserImg, explosaoImg, meteoroImg;
+PImage fundo, nave, laserImg, explosaoImg, meteoroImg, gameOver;
 float naveX, naveY;
 float velocidadeNave = 5;
 float fundoX1 = 0;
@@ -28,6 +30,13 @@ size(1200, 800);
 windowTitle("Cadastro e Jogo");
 fundoX2 = width;
 fundo = loadImage("apresentacao.png");//imagem da tela cadastro - apresentaçãol
+
+gameOver = loadImage("gameOverSangrento.png");
+  
+if(gameOver != null){
+  gameOver.resize(600,400);
+}
+
 }
 
 void draw() {
@@ -66,7 +75,17 @@ text("JOGAR", width/2, 120);
 
 void telaJogo() {
 if (!jogoAtivo) {
-  background(0);
+    background(0);
+    
+    
+  if(gameOver != null){
+    imageMode(CENTER);
+    image(gameOver, width/2, height/2 - 150);
+    imageMode(CORNER);
+  
+  }
+  
+
   fill(255, 0, 0);
   textAlign(CENTER, CENTER);
   textSize(50);
@@ -83,6 +102,9 @@ if (!jogoAtivo) {
   fill(255);
   textSize(25);
   text("Pressione enter para restart",width/2, height/2 + 300);
+  
+  
+  
 
   return;
 }
@@ -94,6 +116,7 @@ if (musicaNave == null) {
   laserImg = loadImage("laser_tiro.png");
   explosaoImg = safeLoadImage("explosao.png");
   meteoroImg = safeLoadImage("meteoro.png");
+  
   nave.resize(80, 80);
   laserImg.resize(200, 100);
   if (meteoroImg != null) meteoroImg.resize(60, 60);
@@ -104,6 +127,15 @@ if (musicaNave == null) {
   naveX = width/2 - nave.width/2;
   naveY = height/2 - nave.height/2;
   fundoX2 = fundo.width;
+  
+  tempoInicial = millis();
+  
+  int tempoDecorrido = millis() - tempoInicial;
+  int minutosPassados =  tempoDecorrido / 60000;
+  multiplicaVeloc = 1.0 + minutosPassados * 0.5;
+  
+
+  
 }
 
 background(0);
@@ -137,7 +169,7 @@ for (int i = tiros.size() - 1; i >= 0; i--) {
 }
 
 // Atualiza meteoros
-if (frameCount % 60 == 0) meteoros.add(new Meteoro());
+if (frameCount % 60 == 0) meteoros.add(new Meteoro(multiplicaVeloc));
 for (int i = meteoros.size() - 1; i >= 0; i--) {
   Meteoro m = meteoros.get(i);
   m.atualizar();
@@ -210,7 +242,7 @@ if (telaAtual == 0) {
 
 
 void restart(){
-   pontuacaoJogador = 0;
+  pontuacaoJogador = 0;
   naveX = width/2 - nave.width/2;
   naveY = height/2 - nave.height/2;
   tiros.clear();
@@ -246,11 +278,13 @@ void mostrar() {
 
 class Meteoro {
 float x, y;
-float velocidadeX = random(3, 7);
+float velocidadeX = random(3, 7) * multiplicaVeloc;
 float velocidadeY = random(-1.5, 1.5);
-Meteoro() {
+Meteoro(float multiplicador) {
   x = width + 50;
   y = random(50, height - 50);
+  velocidadeX = random(3, 7) * multiplicador;
+  velocidadeY = random(-1.5, 1.5);
 }
 void atualizar() {
   x -= velocidadeX;
